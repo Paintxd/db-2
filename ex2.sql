@@ -38,13 +38,14 @@ select q.numero from hospedes h
 	left join consumos con on con.hospede = h.cpf
 	left join quartos q on q.numero = h.quarto
 	left join cardapios car on car.codigo = con.itemcardapio
-	where car.descricao ilike 'janta' or
-		car.descricao ilike 'almoco' and 
-		con.data = '2019-10-12';
+	where con.data = '2019-10-12'
+        group by q.numero, car.descricao
+        having car.descricao in ('almoco', 'janta');
 
-select * from consumos con;
-select * from cardapios car;
-select * from hospedes h;
-select * from clientes c;
-select * from quartos q;
-select * from tipos_quartos tq;
+-- 9
+select c.nome, count(h.cpf) as vezes_hospedado, h.datasai - h.dataent as media_hospedagem from clientes c 
+	join hospedes h on c.cpf = h.cpf 
+		group by c.nome, h.dataent, h.datasai
+		having count(h.cpf) > 1;
+
+-- 10
