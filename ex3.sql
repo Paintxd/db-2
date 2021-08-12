@@ -53,3 +53,28 @@ select (select quarto from hospedes h where h.cpf = con.hospede)
 				where car.codigo = con.itemcardapio and 
 				car.descricao ilike 'almoco'
 			);
+
+-- 7
+select car.descricao from cardapios car
+	where not exists (select 1 from consumos con where con.itemcardapio = car.codigo);
+
+-- 8
+select c.cpf, c.nome, c.fone from clientes c
+	where exists (select 1 from hospedes h 
+					where h.cpf = c.cpf and 
+					h.dataent <= '2017-10-12' and
+					h.datasai >= '2017-10-12'
+				 );
+		
+-- 9
+select car.codigo, car.descricao from cardapios car
+	where car.codigo in (
+		select con.itemcardapio from consumos con where exists (
+			select 1 from hospedes h where 
+				con.hospede = h.cpf
+		)
+	);
+
+-- 10
+select car.* from cardapios car
+	where not exists (select 1 from consumos con where con.itemcardapio = car.codigo);
