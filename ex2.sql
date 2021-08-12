@@ -9,14 +9,10 @@ select count(*) from quartos q
 -- 3
 select c.nome, c.origem from hospedes h left join clientes c on h.cpf = c.cpf
 	where SUBSTRING(h.placaveiculo, 4, 1) like '1' and right(h.placaveiculo, 1) like '3';
-	
+
 -- 4
- select
-	count(*)
-from
-	hospedes h
-where
-	length(h.placaveiculo) != 7;
+ select count(*) from hospedes h
+	where length(h.placaveiculo) != 7;
 
 -- 5
 select cr.descricao, count(con.id) from consumos con join cardapios cr on cr.codigo = con.itemcardapio group by cr.descricao;
@@ -35,16 +31,7 @@ select h.cpf, c.nome, h.placaveiculo, q.numero, tq.descricao, h.datasai
 		join quartos q on h.quarto = q.numero
 		join tipos_quartos tq on q.tipo = tq.codigo;
 	
--- 8
---select q.numero from hospedes h 
---	join consumos con on con.hospede = h.cpf
---	join quartos q on q.numero = h.quarto
---	join cardapios car on car.codigo = con.itemcardapio
---	where con.data = '2019-10-12'
---        group by q.numero, car.descricao
---        having car.descricao in ('almoco', 'janta');
---       
-       
+-- 8		
 SELECT qua.numero quarto, hos.cpf hospede_cpf FROM hospedes hos
   JOIN quartos qua ON hos.quarto = qua.numero
   WHERE EXISTS ( SELECT 1
@@ -72,4 +59,3 @@ select c.nome, count(h.cpf) as vezes_hospedado, avg(h.datasai - h.dataent) as me
 select c.codigo, c.descricao from cardapios c where not exists 
       (select * from hospedes h where not exists 
       (select * from consumos c2 where c2.hospede = h.cpf and c.codigo = c2.itemcardapio));
-
